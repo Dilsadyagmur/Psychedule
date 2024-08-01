@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Availability</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Add Availability</h2>
+        <table id="psychologistsTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Psychologists data will be populated here -->
+            </tbody>
+        </table>
+
+        <!-- Add Availability Modal -->
+        <div class="modal fade" id="addAvailabilityModal" tabindex="-1" aria-labelledby="addAvailabilityModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAvailabilityModalLabel">Add Availability</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addAvailabilityForm">
+                            <input type="hidden" id="psychologistId" name="psychologistId" />
+                            <div class="mb-3">
+                                <label for="startDate" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="endDate" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="workingHoursStart" class="form-label">Working Hours Start</label>
+                                <input type="time" class="form-control" id="workingHoursStart" name="workingHoursStart" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="workingHoursEnd" class="form-label">Working Hours End</label>
+                                <input type="time" class="form-control" id="workingHoursEnd" name="workingHoursEnd" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Availability</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#psychologistsTable').DataTable({
+                ajax: {
+                    url: '/Admin/Psychologists/GetAll',
+                    type: 'GET',
+                    dataType: 'json'
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'userName' },
+                    { data: 'email' },
+                    { data: 'phoneNumber' },
+                    {
+                        data: null,
+                        defaultContent: '<button class="btn btn-primary btn-sm add-availability" data-bs-toggle="modal" data-bs-target="#addAvailabilityModal">Add Availability</button>',
+                        orderable: false
+                    }
+                ]
+            });
+
+            $('#psychologistsTable').on('click', '.add-availability', function () {
+                var row = table.row($(this).closest('tr')).data();
+                var psychologistId = row.id;
+                $('#psychologistId').val(psychologistId);
+            });
+
+            $('#addAvailabilityForm').on('submit', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '/Admin/Availability/GenerateAvailabilitiesForPsychologist', // Adjust to your URL
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        $('#addAvailabilityModal').modal('hide');
+                        table.ajax.reload(); // Reload the table data
+                    },
+                    error: function (xhr, status, error) {
+                        alert('An error occurred while adding availability.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

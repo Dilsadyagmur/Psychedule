@@ -1,0 +1,62 @@
+﻿@{
+    Layout = "_Layout";
+}
+@{
+    ViewData["Title"] = "Randevu Listem";
+}
+
+<h2>Randevu Listem</h2>
+
+<div>
+    <table id="appointmentTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tarih</th>
+                <th>Başlama Saati</th>
+                <th>Psikolog</th>
+                <th>Durum</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- İçerik AJAX ile doldurulacak -->
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+            $('#appointmentTable').DataTable({
+                ajax: {
+                    url: '@Url.Action("GetAllMyAppointments", "Appointment")',
+                    type: 'GET',
+                    dataSrc: 'data'
+                },
+                columns: [
+                    {
+                        "data": "appointmentDateTime", render: function (data) {
+                            return new Date(data).toLocaleDateString('tr-TR');
+                        }
+                    },
+                    {
+                        "data": "appointmentStartTime", render: function (data) {
+                            return data.substring(0, 5); // Sadece saati ve dakikayı göster
+                        }
+                    },
+                    { "data": "userName" },
+                    {
+                        "data": "status", render: function (data) {
+                            return data; // Enum adını doğrudan döndür
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}
