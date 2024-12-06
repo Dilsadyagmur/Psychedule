@@ -46,7 +46,7 @@ Version: 1.0
     --bs-danger: #dc3545;
     --bs-light: #f8f9fa;
     --bs-dark: #212529;
-    --bs-primary-rgb: 13, 110, 253;
+    --bs-primary-rgb: 92, 225, 230;
     --bs-secondary-rgb: 108, 117, 125;
     --bs-success-rgb: 25, 135, 84;
     --bs-info-rgb: 13, 202, 240;
@@ -3317,7 +3317,7 @@ textarea.form-control-lg {
 .nav-link {
     display: block;
     padding: 0.5rem 1rem;
-    color: #0d6efd;
+    color: #0d6efD;
     text-decoration: none;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }

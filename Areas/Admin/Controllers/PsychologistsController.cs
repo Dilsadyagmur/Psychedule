@@ -79,5 +79,17 @@ namespace PschologyProject.Areas.Admin.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user==null)
+            {
+                return BadRequest();
+            }
+             return View(user);
+        }
+
     }
 }

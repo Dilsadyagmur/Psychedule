@@ -64,6 +64,11 @@ namespace PschologyProject.Controllers
                            && starttimespan == a.StartTime
                            
                            && a.IsAvailable);
+            if (selectedDate < DateTime.Today )
+            {
+                return BadRequest("Seçtiğiniz tarihte randevu bulunmamaktadır.");
+            }
+            
 
             if (availability == null)
             {

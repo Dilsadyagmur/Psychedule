@@ -89,7 +89,7 @@
                 $('#appointmentModal').modal('hide');
             },
             error: function (xhr) {
-                alert('Randevu oluşturulurken hata oluştu.');
+                alert('Seçilen zaman dilimi uygun değil veya dolmuş.');
                 console.error(xhr);
             }
         });
